@@ -16,11 +16,11 @@ class Hand
   end
 
   def calculate_hand
-    score = 0
+    updated_score = 0
     aces = 0
-    @cards.each { |card| card.type == "ace" ? aces+=1 : score+=card.value }
-    aces.times { score <= 10 ? score+=11 : score+=1 }
-    @score = score
+    @cards.each { |card| card.type == "ace" ? aces+=1 : updated_score+=card.value }
+    aces.times { updated_score <= 10 ? updated_score+=11 : updated_score+=1 }
+    @score = updated_score
   end
 
   def create_obj_for_card(card)

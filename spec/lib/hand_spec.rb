@@ -48,7 +48,7 @@ describe Hand do
       hand.add_card("10♦")
       temp_hand = [Card.new("6♠"), Card.new("A♥"), Card.new("K♦"), Card.new("10♦")]
       hand.cards.each_with_index do |card, index|
-        expect(card.original).to eq(temp_hand[index].original)
+        expect(card.card).to eq(temp_hand[index].card)
       end
     end
   end

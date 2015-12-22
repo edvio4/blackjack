@@ -9,15 +9,17 @@ class Blackjack
     @dealer_hand = []
   end
 
-  def run_game
+  def play
     @player_hand = Hand.new(@deck.deal(2), "Player")
     player_turn(@player_hand)
-    unless @player_hand.score > 21
+    if @player_hand.score <= 21
       @dealer_hand = Hand.new(@deck.deal(2), "Dealer")
       dealer_turn(@dealer_hand)
-      winner(@player_hand.score, @dealer_hand.score) unless @dealer_hand.score > 21
+      winner(@player_hand.score, @dealer_hand.score) if @dealer_hand.score <= 21
     end
   end
+
+  # private
 
   def player_turn(hand)
     puts "Welcome to Blackjack!\n\n"
@@ -38,9 +40,9 @@ class Blackjack
       print "\nHit or stand (H/S): "
       answer = gets.chomp.downcase
 
-      player_hit?(answer)
-      break if bust?(hand) == 0
-      break if player_stand?(answer) == 0
+      player_hit?(@player_hand,answer)
+      break if bust?(hand)
+      break if player_stand?(@player_hand, answer)
       invalid_input?(answer)
     end
   end
@@ -48,19 +50,19 @@ class Blackjack
   def dealer_hit_or_stand(hand)
     while true
       hand.calculate_hand
-      break if bust?(hand) == 0
-      break if dealer_stand?(hand) == 0
+      break if bust?(hand)
+      break if dealer_stand?(hand)
       dealer_hit?(hand)
     end
   end
-
 
   def dealer_stand?(hand)
     if hand.score >= 17
       output_score(hand)
       puts "\nDealer stands"
-      return 0
+      return true
     end
+    false
   end
 
   def dealer_hit?(hand)
@@ -77,36 +79,38 @@ class Blackjack
   end
 
 
-  def player_hit?(answer)
+  def player_hit?(hand, answer)
     if answer == "h"
-      hit(@player_hand)
+      hit(hand)
       puts
-      output_dealt_card(@player_hand)
-      @player_hand.calculate_hand
-      output_score(@player_hand)
+      output_dealt_card(hand)
+      hand.calculate_hand
+      output_score(hand)
     end
   end
 
-  def player_stand?(answer)
+  def player_stand?(hand, answer)
     if answer == "s"
-      @player_hand.calculate_hand
+      hand.calculate_hand
       puts
-      output_score(@player_hand)
-      return 0
+      output_score(hand)
+      return true
     end
+    false
   end
 
   def bust?(hand)
     if hand.score > 21
       if hand.name == "Player"
         puts "\nBust! You lose..."
-        return 0
+        return true
       else
         output_score(hand)
         puts "\nDealer busts! You win!"
-        return 0
+        return true
       end
     end
+    false
   end
 
   def hit(hand)
@@ -137,6 +141,6 @@ class Blackjack
 
 end
 
-Blackjack.new.run_game
+Blackjack.new.play
 
 # binding.pry

@@ -12,26 +12,34 @@ describe Blackjack do
     it "runs blackjack game" do
       expect(blackjack).to be_a(Blackjack)
     end
-
-    # it "determines score of player hand" do
-    #   allow(blackjack).to receive(:gets).and_return("h")
-    #   expect(blackjack.player_turn(player_hand)).to eq(Blackjack)
-    # end
   end
-
+  
   describe "#output_hand" do
     it "outputs player's hand" do
-      expect { blackjack.output_hand(player_hand) }.to output("Player was dealt 6♠\nPlayer was dealt A♥\nPlayer was dealt K♦\n").to_stdout
+      output = ""
+      player_hand.cards.each { |card| output+="#{player_hand.name} was dealt #{card.card}\n" }
+      expect { blackjack.output_hand(player_hand) }.to output(output).to_stdout
     end
   end
 
   describe "#output_score" do
     it "outputs player's score" do
       player_hand.calculate_hand
-      expect { blackjack.output_score(player_hand) }.to output("Player score: 17\n").to_stdout
+      expect { blackjack.output_score(player_hand) }.to output("#{player_hand.name} score: #{player_hand.score}\n").to_stdout
     end
   end
 
+  describe "#output_dealt_card" do
+    it "outputs player's dealt card" do
+      expect { blackjack.output_dealt_card(player_hand) }.to output("#{player_hand.name} was dealt #{player_hand.cards.last.card}\n").to_stdout
+    end
+  end
+
+  describe "#hit" do
+    it "adds card to hand" do
+      expect ()
+    end
+  end
 
 
 
